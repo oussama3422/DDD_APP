@@ -22,7 +22,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           authFailureOrSucess: none(),
         ));
       } else if (event is PasswordChanged) {
-        // Handle PasswordChanged event
+         emit(state.copyWith(
+          password: Password(event.passStr),
+          authFailureOrSucess: none(),
+        ));
       } else if (event is RegisterWithEmailAndPasswordPressed) {
         // Handle RegisterWithEmailAndPasswordPressed event
         emit(_performActionOnAuthFacadeWithEmailEmailAndPassword(_authFacade.registerWithEmailAndPassword));
@@ -59,31 +62,30 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     })
     forwardedCall, 
   )async {
-    Either<AuthFailure,Unit> failureOrSucess;
+      var failureOrSucess;
         // ignore: invalid_use_of_visible_for_testing_member
 
       final isEmailValid = state.emailAdress.isValid();
         final isPasswordValid = state.password.isValid();
-        var failureOrSuccess;
         if (isEmailValid && isPasswordValid) {
         // ignore: invalid_use_of_visible_for_testing_member
-        emit(
-            state.copyWith(isSubmitting: true,authFailureOrSucess: none(),));
-            failureOrSuccess = await forwardedCall(emailAdress: state.emailAdress, password: state.password);
-        }
-        // ignore: invalid_use_of_visible_for_testing_member
-        emit(
-          state.copyWith(isSubmitting: false,showErrorMessages: true,authFailureOrSucess: optionOf(failureOrSuccess),
+          emit( state.copyWith(isSubmitting: true,authFailureOrSucess: none(),));
+          failureOrSucess = await forwardedCall(emailAdress: state.emailAdress, password: state.password);
+           // ignore: invalid_use_of_visible_for_testing_member
+          // emit(
+          // state.copyWith(isSubmitting: false,authFailureOrSucess: optionOf(failureOrSuccess),
           // authFailureOrSucess:failureOrSuccess==null?none():some(failureOrSuccess),
           //+++++++++ Same That above ++++++
-        ));
+        //  ));
+        }
+       
         // ignore: invalid_use_of_visible_for_testing_member
         emit(state.copyWith(
-          isSubmitting: true,
-          authFailureOrSucess: none(),
+          isSubmitting: false,
+          showErrorMessages: true,
+          authFailureOrSucess:optionOf(failureOrSucess),
         ));
-        var failureOrScuess = await _authFacade.signInWithGoogle();
-        // ignore: invalid_use_of_visible_for_testing_member
-        emit(state.copyWith( isSubmitting: false, authFailureOrSucess: some(failureOrScuess)));
+        // var failureOrScuess = await forwardedCall(emailAdress: state.emailAdress,password: state.password);
+        // // ignore: invalid_use_of_visible_for_testing_member
   }
 }
