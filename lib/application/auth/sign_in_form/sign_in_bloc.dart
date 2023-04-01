@@ -10,7 +10,7 @@ part 'sign_in_state.dart';
 part 'sign_in_bloc.freezed.dart';
 
 
-@injectable
+
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   IAuthFacade _authFacade;
   SignInBloc(this._authFacade) : super(SignInState.initial()) {

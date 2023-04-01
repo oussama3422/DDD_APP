@@ -2,15 +2,13 @@ import 'package:flutter_application_1/application/auth/sign_in_form/sign_in_bloc
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'domain/auth/i_auth_facade.dart';
 import 'infrastructure/auth/firebase_auth_facade.dart';
-import 'infrastructure/core/firebase_injectable_module.dart';
-final GetIt getIt = GetIt.instance();
+final GetIt getIt = GetIt.instance;
 
 void init(String env) {
-final firebaseInjectionMNodule = _$FirebaseInjectionModule();
-getIt.registerLazySingleton<FirebaseAuth>(() => firebaseInjectionMNodule.firebaseAuth);
+// final firebaseInjectionMNodule = _$FirebaseInjectionModule();
+// getIt.registerLazySingleton<FirebaseAuth>(() => firebaseInjectionMNodule.firebaseAuth);
 getIt.registerFactory<SignInBloc>(() => SignInBloc(getIt<IAuthFacade>()));
 getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
 getIt.registerSingleton<GoogleSignIn>(GoogleSignIn());
@@ -29,4 +27,4 @@ getIt.registerLazySingleton<IAuthFacade>(() => FirebaseAuthFacade(
   // getIt.registerSingleton<FirebaseAuth>(getIt<FirebaseInjectableModeule>().firebaseAuth);
 }
 
-class  _$FirebaseInjectionModule extends FirebaseInjectableModeule{}
+// class  _$FirebaseInjectionModule extends FirebaseInjectableModeule{}
