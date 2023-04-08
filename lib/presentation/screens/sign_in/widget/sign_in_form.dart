@@ -30,70 +30,95 @@ class SignInForm extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
-               const Text(
-                '📝',
-                textAlign: TextAlign.center,
-                style:TextStyle(fontSize: 130),
+               const SizedBox(height: 40),
+               Center(
+                 child: const Text(
+                  '📝',
+                  textAlign: TextAlign.center,
+                  style:TextStyle(fontSize: 100),
+                  ),
+               ),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextFormField(
+                    decoration:const InputDecoration(
+                        prefixIcon: Icon(Icons.email),
+                        labelText: 'Email',
+                    ),
+                    autocorrect:false,
+                    onChanged: (newVal){
+                      BlocProvider.of<SignInBloc>(context).add(SignInEvent.emailChanged(newVal));
+                    },
+                    validator: (_) => 
+                      BlocProvider.of<SignInBloc>(context).state.emailAdress.value.fold(
+                      (failure) => failure.maybeMap(invalidEmail:(val)=>'Invalid Email', shortPassword:(val)=>null ,orElse: ()=>null) ,
+                      (sucess) => null
+                      ) ,
+                  ),
                 ),
                 const SizedBox(height: 10),
-                TextFormField(
-                  decoration:const InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      labelText: 'Enail',
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextFormField(
+                    decoration:const InputDecoration(
+                        prefixIcon: Icon(Icons.password),
+                        labelText: 'Password',
+                    ),
+                    autocorrect:false,
+                    obscureText: true,
+                    onChanged: (newVal){
+                      BlocProvider.of<SignInBloc>(context).add(SignInEvent.passwordChanged(newVal));
+                    },
+                    validator: (_) => 
+                      BlocProvider.of<SignInBloc>(context).state.password.value.fold(
+                      (failure) => failure.maybeMap(invalidEmail:(val)=>'Short Password', shortPassword:(val)=>null ,orElse: ()=>null) ,
+                      (sucess) => null
+                      ) ,
                   ),
-                  autocorrect:false,
-                  onChanged: (newVal){
-                    BlocProvider.of<SignInBloc>(context).add(SignInEvent.emailChanged(newVal));
-                  },
-                  validator: (_) => 
-                    BlocProvider.of<SignInBloc>(context).state.emailAdress.value.fold(
-                    (failure) => failure.maybeMap(invalidEmail:(val)=>'Invalid Email', shortPassword:(val)=>null ,orElse: ()=>null) ,
-                    (sucess) => null
-                    ) ,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  decoration:const InputDecoration(
-                      prefixIcon: Icon(Icons.password),
-                      labelText: 'Password',
-                  ),
-                  autocorrect:false,
-                  obscureText: true,
-                  onChanged: (newVal){
-                    BlocProvider.of<SignInBloc>(context).add(SignInEvent.passwordChanged(newVal));
-                  },
-                  validator: (_) => 
-                    BlocProvider.of<SignInBloc>(context).state.password.value.fold(
-                    (failure) => failure.maybeMap(invalidEmail:(val)=>'Short Password', shortPassword:(val)=>null ,orElse: ()=>null) ,
-                    (sucess) => null
-                    ) ,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
+                    Container(
+                      width: 150,
                       child: TextButton(
+                        style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.pink),
+                        ),
                         onPressed: (){
                              BlocProvider.of<SignInBloc>(context).add(SignInEvent.signInWithEmailAndPasswordPressed());
                         },
-                        child: Text('Sign In')
+                        child: Text('Sign In',style:TextStyle(color: Colors.grey))
                         ),
                     ),
-                    Expanded(
+                    SizedBox(width: 15),
+                    Container(
+                      width: 150,
                       child: TextButton(
+                        style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.pink),
+                        ),
                         onPressed: (){
                           BlocProvider.of<SignInBloc>(context).add(SignInEvent.registerWithEmailAndPasswordPressed());
                         },
-                        child: Text('Register')
+                        child: Text('Register',style:TextStyle(color: Colors.grey))
                         ),
                     )
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: (){
-                    BlocProvider.of<SignInBloc>(context).add(SignInEvent.signInWithGooglePressed());
-                  },
-                  child: Text('Sign In With Google'),
-                  )
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.grey),
+                    ),
+                    onPressed: (){
+                      BlocProvider.of<SignInBloc>(context).add(SignInEvent.signInWithGooglePressed());
+                    },
+                    child: Text('Sign In With Google'),
+                    ),
+                )
             ],
           ) 
           );

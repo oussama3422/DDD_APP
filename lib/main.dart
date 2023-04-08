@@ -5,11 +5,11 @@ import 'package:flutter_application_1/presentation/core/app_widget.dart';
 import 'package:injectable/injectable.dart';
 import 'firebase_options.dart';
 void main() async{
-   init(Environment.prod);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  init(Environment.prod);
   runApp(const AppWidget());
 }
 
